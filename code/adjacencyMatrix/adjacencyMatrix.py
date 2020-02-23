@@ -2,13 +2,6 @@ import numpy as np
 from functools import wraps
 from graph import Graph
 
-def _validate_vertex_index(function):
-    @wraps(function)
-    def wrapper(*args, **kwargs):
-        v = args[0]
-        if v < 0 or v >= self.num_vertices:
-            raise ValueError('Cannot access vertex {}'.format(v))
-    return wrapper
 
 class AdjacencyMatrix(Graph):
 
@@ -30,22 +23,23 @@ class AdjacencyMatrix(Graph):
         if not self.directed:
             self.matrix[v2][v1] = weight
 
-    @_validate_vertex_index    
     def get_adjacent_vertices(self, v):
-        
-
+        if v < 0 or v >= self.num_vertices:
+            raise ValueError('Cannot access vertex {}'.format(v))
         adjacent_vertices = []
         for item in range(self.num_vertices):
             if self.matrix[v][item] > 0:
                 adjacent_vertices.append(item)
         return adjacent_vertices
 
-    @_validate_vertex_index
     def get_indegree(self, v):
+        if v < 0 or v >= self.num_vertices:
+            raise ValueError('Cannot access vertex {}'.format(v))
         indegree = 0
         for item in range(self.num_vertices):
             if self.matrix[item][v] > 0:
                 indegree += 1
+        return indegree
 
     def get_edge_weight(self, v1, v2):
         return self.matrix[v1][v2]
